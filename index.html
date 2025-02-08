@@ -13,10 +13,15 @@
     .hidden {
       display: none;
     }
-    input, button {
+    input, textarea {
       padding: 10px;
       font-size: 16px;
       margin: 10px 0;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
     }
     .letter, .error-message {
       margin-top: 20px;
@@ -37,7 +42,7 @@
   </div>
   
   <div id="error-message" class="hidden error-message">
-    <p id="error-content">Có thể không phải thư dành cho bạn. Hãy thử lại!</p>
+    <p id="error-content">Có thể không phải thư dành cho bạn. Hãy thử lại, ví dụ như ngày tháng không cần số 0 ở trước hoặc có số 0 ở trước!</p>
   </div>
 
   <button onclick="promptAdmin()">Đăng nhập Admin</button>
@@ -57,18 +62,11 @@
   </div>
 
   <script>
-    let correctDate = "";
-
-    // Đọc ngày sinh từ file config.json
-    fetch('config.json')
-      .then(response => response.json())
-      .then(data => {
-        correctDate = data.correctDate;
-      });
+    let correctDates = ["2010-06-09"]; // Ngày sinh đúng mặc định
 
     function checkDate() {
       const inputDate = document.getElementById('birthdate').value;
-      if (inputDate === correctDate) {
+      if (correctDates.includes(inputDate)) {
         document.getElementById('letter').classList.remove('hidden');
         document.getElementById('error-message').classList.add('hidden');
       } else {
@@ -92,8 +90,7 @@
       const newError = document.getElementById('error-text').value;
 
       if (newDate) {
-        correctDate = newDate;
-        updateConfigFile(newDate, newLetter, newError);
+        correctDates = [newDate, newDate.replace(/^0/, ''), newDate.replace(/-0/g, '-')]; // Cập nhật ngày đúng với các biến thể
       }
       if (newLetter) {
         document.getElementById('letter-content').textContent = newLetter;
@@ -103,14 +100,6 @@
       }
 
       alert("Nội dung đã được cập nhật!");
-    }
-
-    // Cập nhật file config.json (phải làm trên GitHub)
-    function updateConfigFile(newDate, newLetter, newError) {
-      // Đoạn này giả lập việc chỉnh sửa file config.json trên GitHub. Thực tế cần dùng API để cập nhật
-      console.log("Cập nhật file config.json với ngày:", newDate);
-      console.log("Nội dung thư:", newLetter);
-      console.log("Thông báo khi sai:", newError);
     }
   </script>
 </body>
