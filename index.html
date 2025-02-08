@@ -101,6 +101,26 @@
 
       alert("Nội dung đã được cập nhật!");
     }
-  </script>
+  <script>
+  let correctDate = "";
+
+  // Đọc ngày sinh từ file config.json
+  fetch('config.json')
+    .then(response => response.json())
+    .then(data => {
+      correctDate = data.correctDate;
+    });
+
+  function checkDate() {
+    const inputDate = document.getElementById('birthdate').value;
+    if (inputDate === correctDate) {
+      document.getElementById('letter').classList.remove('hidden');
+      document.getElementById('error-message').classList.add('hidden');
+    } else {
+      document.getElementById('letter').classList.add('hidden');
+      document.getElementById('error-message').classList.remove('hidden');
+    }
+  }
+</script>
 </body>
 </html>
